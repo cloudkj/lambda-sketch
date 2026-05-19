@@ -1,23 +1,13 @@
 (ns lambda-sketch.core
   (:import [com.google.common.hash Hashing]))
 
-(defn to-bytes
-  [obj]
-  (with-open [baos (java.io.ByteArrayOutputStream.)
-              oos (java.io.ObjectOutputStream. baos)]
-    (.writeObject oos obj)
-    (.toByteArray baos)))
-
-;; TODO: add support for other types
 (defn seed-hash
   [seed]
   (let [h (Hashing/murmur3_128 seed)]
     (fn [x]
       (cond
-        ;;(instance? java.lang.Double x) (-> h .newHasher (.putDouble x) .hash .asLong)
-        ;;(instance? java.lang.Float x) (-> h .newHasher (.putFloat x) .hash .asLong)
-        ;;(instance? java.lang.Integer x) (-> h .newHasher (.putInt x) .hash .asLong)
-        (instance? java.lang.Long x) (-> h .newHasher (.putLong x) .hash .asLong bigint)
+        ;; TODO: add support for other types
+        (instance? java.lang.Long x) (bigint (.asLong (.hashLong h x)))
         :else (throw (UnsupportedOperationException. (str "TODO:" (class x))))))))
 
 (defn bloom-filter
