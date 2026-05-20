@@ -12,9 +12,9 @@
     (let [items (shuffle (range (* 2 n)))
           in (take n items)
           out (take-last n items)
-          bf (reduce (fn [bf i] (bloom-filter-add bf i))
+          bf (reduce (fn [bf i] (conj bf i))
                      (bloom-filter m k)
                      in)
-          fpr (/ (count (filter #(bloom-filter-test bf %) out)) n)
+          fpr (/ (count (filter #(bf %) out)) n)
           expected (Math/pow (- 1 (Math/exp (/ (* (- k) n) m))) k)]
     (println m k n "actual FPR:" (double fpr) "expected:" expected)))

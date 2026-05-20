@@ -1,36 +1,49 @@
 (ns lambda-sketch.core
   (:import [com.google.common.hash Hashing]))
 
-;; TODO: expand hashing support for Clojure types
-
 (defn seed-hash
   [seed]
   (let [h (Hashing/murmur3_128 seed)]
     (fn [x]
       (cond
-        ;; TODO: add support for other types
+        ;; TODO: add support for additional types
         (instance? java.lang.Long x) (bigint (.asLong (.hashLong h x)))
+        (instance? java.lang.String x) (bigint (.asLong (.hashUnencodedChars h x)))
         :else (throw (UnsupportedOperationException. (str "TODO:" (class x))))))))
 
-;; TODO: consider implementing data structures as IPersistentCollection for cons, etc
+(deftype BloomFilter
+  [m bits hashes size]
+
+  clojure.lang.IPersistentCollection
+  (cons [this x]
+    (BloomFilter. m
+                  (reduce (fn [b h] (doto b (.set (h x)))) (.clone bits) hashes)
+                  hashes
+                  (inc size)))
+  (empty [this]
+    (BloomFilter. m (java.util.BitSet. m) hashes 0))
+  (equiv [this other]
+    (and (= m (.m other))
+         (.equals bits (.bits other))
+         (= (count hashes) (count (.hashes other)))
+         (= size (.size other))))
+
+  clojure.lang.Counted
+  (count [this] size)
+
+  clojure.lang.IFn
+  (invoke [this x] (not (some false? (map (fn [h] (.get bits (h x))) hashes)))))
 
 (defn bloom-filter
   [m k]
   (let [h1 (seed-hash 1)
         h2 (seed-hash 2)]
-    {:bits (java.util.BitSet. m)
-     :hash-fns (for [i (range k)] (fn [x] (int (mod (+ (h1 x) (* i (h2 x))) m))))}))
+    (BloomFilter. m
+                  (java.util.BitSet. m)
+                  (for [i (range k)] (fn [x] (int (mod (+ (h1 x) (* i (h2 x))) m))))
+                  0)))
 
-(defn bloom-filter-add
-  [bf x]
-  (assoc bf :bits
-         (reduce (fn [b h] (doto b (.set (h x))))
-                 (:bits bf)
-                 (:hash-fns bf))))
-
-(defn bloom-filter-test
-  [bf x]
-  (not (some false? (map #(.get (:bits bf) (% x)) (:hash-fns bf)))))
+;; TODO: implement CMS as IPersistentCollection
 
 (defn count-min-sketch
   [w d]
