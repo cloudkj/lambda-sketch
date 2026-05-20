@@ -22,19 +22,15 @@
 (deftest test-count-min-sketch-empty
   (testing "An empty Count-Min Sketch should return 0 for all queries"
     (let [cms (count-min-sketch 100 5)]
-      (is (= 0 (count-min-sketch-get cms 1)))
-      (is (= 0 (count-min-sketch-get cms 2)))
-      (is (= 0 (count-min-sketch-get cms 100))))))
+      (is (= 0 (cms 1)))
+      (is (= 0 (cms 2)))
+      (is (= 0 (cms 100))))))
 
 (deftest test-basic-counting
-  (testing "Should accurately track counts threading state functionally."
+  (testing
     (let [cms (count-min-sketch 1000 5)
-          cms (reduce count-min-sketch-add
-                      cms
-                      (repeat 5 11))
-          cms (reduce count-min-sketch-add 
-                      cms
-                      (repeat 3 22))]
-      (is (= 5 (count-min-sketch-get cms 11)))
-      (is (= 3 (count-min-sketch-get cms 22)))
-      (is (= 0 (count-min-sketch-get cms 33))))))
+          cms (into cms (repeat 5 11))
+          cms (into cms (repeat 3 22))]
+      (is (= 5 (cms 11)))
+      (is (= 3 (cms 22)))
+      (is (= 0 (cms 33))))))
