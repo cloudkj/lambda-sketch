@@ -26,7 +26,7 @@
       (is (= 0 (cms 2)))
       (is (= 0 (cms 100))))))
 
-(deftest test-basic-counting
+(deftest test-count-min-sketch-add
   (testing
     (let [cms (count-min-sketch 1000 5)
           cms (into cms (repeat 5 11))
@@ -34,3 +34,8 @@
       (is (= 5 (cms 11)))
       (is (= 3 (cms 22)))
       (is (= 0 (cms 33))))))
+
+(deftest test-hyperloglog-empty
+  (testing
+    (let [hll (hyperloglog 128)]
+      (is (= 0 (count hll))))))
