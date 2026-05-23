@@ -108,27 +108,3 @@
 (defn hyperloglog
   [m]
   (HyperLogLog. (vec (repeat m 0))))
-
-;; (defn hyperloglog-add
-;;   [hll x]
-;;   (let [m (count (:registers hll))
-;;         b (int (Math/ceil (/ (Math/log m) (Math/log 2))))
-;;         val (long ((seed-hash 0) x))
-;;         pos (unsigned-bit-shift-right val (- Long/SIZE b))
-;;         mask (dec (bit-shift-left 1 (- Long/SIZE b)))
-;;         remaining (bit-and val mask)
-;;         pw (inc (- (Long/numberOfLeadingZeros remaining) b))]
-;;     ;; (println x m b)
-;;     ;; (println (bstring val) val)
-;;     ;; (println (bstring pos) pos)
-;;     ;; (println (bstring remaining) remaining)
-;;     ;; (println (Long/numberOfLeadingZeros remaining))
-;;     (assoc hll
-;;            :registers
-;;            (update (:registers hll) pos max pw))))
-
-;; (defn hyperloglog-count
-;;   [hll]
-;;   (let [m (count (:registers hll))
-;;         correction (/ 0.7213 (inc (/ 1.079 m)))]
-;;     (* correction m m (/ 1 (reduce + (map #(Math/pow 2 (- %)) (:registers hll)))))))

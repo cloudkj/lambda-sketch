@@ -4,6 +4,7 @@ Probabilistic data structures and sketching algorithms in Clojure:
 
 * Bloom filter - set membership
 * Count-min sketch - frequency counts
+* HyperLogLog - cardinality counts
 
 ### Demo
 
@@ -32,4 +33,18 @@ Probabilistic data structures and sketching algorithms in Clojure:
 (["said" 460] ["you" 471] ["i" 524] ["she" 549] ["it" 607] ["of" 637] ["a" 695] ["to" 811] ["and" 941] ["the" 1839])
 => (map (fn [[w _]] [w (count-alice w)]) (take-last 10 (sort-by second (frequencies alice))))
 (["said" 519] ["you" 501] ["i" 550] ["she" 580] ["it" 654] ["of" 673] ["a" 723] ["to" 856] ["and" 1010] ["the" 1873])
+
+;; Initialize HyperLogLog for cardinality estimates
+=> (def distinct-alice (into (hyperloglog 128) alice))
+=> (def distinct-pride (into (hyperloglog 128) pride))
+
+;; Actual and estimated cardinality for text
+user=> (count (distinct alice))
+3143
+user=> (count distinct-alice)
+3743
+user=> (count (distinct pride))
+7303
+user=> (count distinct-pride)
+7702
 ```
