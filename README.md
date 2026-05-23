@@ -39,12 +39,12 @@ Probabilistic data structures and sketching algorithms in Clojure:
 => (def distinct-pride (into (hyperloglog 128) pride))
 
 ;; Actual and estimated cardinality for text
-user=> (count (distinct alice))
+=> (count (distinct alice))
 3143
-user=> (count distinct-alice)
+=> (count distinct-alice)
 3743
-user=> (count (distinct pride))
+=> (count (distinct pride))
 7303
-user=> (count distinct-pride)
+=> (count distinct-pride)
 7702
 ```
