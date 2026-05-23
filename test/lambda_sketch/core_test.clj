@@ -31,9 +31,25 @@
     (let [cms (count-min-sketch 1000 5)
           cms (into cms (repeat 5 11))
           cms (into cms (repeat 3 22))]
-      (is (= 5 (cms 11)))
-      (is (= 3 (cms 22)))
+      (is (<= 5 (cms 11)))
+      (is (<= 3 (cms 22)))
       (is (= 0 (cms 33))))))
+
+(deftest test-count-min-sketch-estimates
+  (testing "Count-Min Sketch estimates >= actual counts"
+    (let [cms (count-min-sketch 8 2)
+          cms (into cms (mapcat repeat [1 1 2 3 5 8 13 21 34 55 89] (range 11)))]
+      (is (<= 1 (cms 0)))
+      (is (<= 1 (cms 1)))
+      (is (<= 2 (cms 2)))
+      (is (<= 3 (cms 3)))
+      (is (<= 5 (cms 4)))
+      (is (<= 8 (cms 5)))
+      (is (<= 13 (cms 6)))
+      (is (<= 21 (cms 7)))
+      (is (<= 34 (cms 8)))
+      (is (<= 55 (cms 9)))
+      (is (<= 89 (cms 10))))))
 
 (deftest test-hyperloglog-empty
   (testing

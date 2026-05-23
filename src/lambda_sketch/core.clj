@@ -101,6 +101,7 @@
   (count [this]
     (let [m (count registers)
           v (count (filter zero? registers))
+          ;; TODO: support proper correction for low values of `m` registers
           correction (/ 0.7213 (inc (/ 1.079 m)))
           e (* correction m m (/ 1 (reduce + (map #(Math/pow 2 (- %)) registers))))]
       (long (if (= v 0) e (* m (Math/log (/ m v))))))))
