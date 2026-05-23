@@ -6,7 +6,7 @@ Probabilistic data structures and sketching algorithms in Clojure:
 * Count-min sketch - frequency counts
 * HyperLogLog - cardinality counts
 
-### Demo
+### Usage
 
 ```clojure
 => (use 'lambda-sketch.core)
