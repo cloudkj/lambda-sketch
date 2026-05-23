@@ -100,9 +100,10 @@
   clojure.lang.Counted
   (count [this]
     (let [m (count registers)
-          correction (/ 0.7213 (inc (/ 1.079 m)))]
-      ;; TODO: implement linear counting
-      (long (* correction m m (/ 1 (reduce + (map #(Math/pow 2 (- %)) registers))))))))
+          v (count (filter zero? registers))
+          correction (/ 0.7213 (inc (/ 1.079 m)))
+          e (* correction m m (/ 1 (reduce + (map #(Math/pow 2 (- %)) registers))))]
+      (long (if (= v 0) e (* m (Math/log (/ m v))))))))
 
 (defn hyperloglog
   [m]
