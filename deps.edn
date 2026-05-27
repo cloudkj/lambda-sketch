@@ -1,0 +1,2 @@
+{:deps
+ {com.google.guava/guava {:mvn/version "33.6.0-jre"}}}

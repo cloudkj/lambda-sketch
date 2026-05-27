@@ -1,6 +1,6 @@
 (defproject lambda-sketch "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "Probabilistic data structures and sketching algorithms"
+  :url "https://github.com/cloudkj/lambda-sketch"
   :license {:name "MIT License"
             :url "https://opensource.org/license/MIT"}
   :dependencies [[org.clojure/clojure "1.11.1"]
