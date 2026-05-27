@@ -6,6 +6,12 @@ Probabilistic data structures and sketching algorithms in Clojure:
 * Count-min sketch - frequency counts
 * HyperLogLog - cardinality counts
 
+### Installation
+
+Add the following dependency to your `deps.edn` file:
+
+    io.github.cloudkj/lambda-sketch {:git/tag "v0.0.2" :git/sha "c2ff724"}
+
 ### Usage
 
 ```clojure
